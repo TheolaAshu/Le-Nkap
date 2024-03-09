@@ -1,7 +1,33 @@
 import {} from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+  const response = await fetch("https//le-nkap-v1.onrender.com/users", {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const res = await response.json();
+
+    if (response.ok){
+      console.log("success:", await response.json());
+    }
+    console.log("error:", res);
+  };
+
   return (
     <div className="w-full h-screen flex items-center flex-col gap-10 justify-center">
       <h2 className="text-5xl font-semibold text-teal-600">Tracky</h2>
@@ -14,15 +40,23 @@ function Login() {
         </div>
         <div className="w-full flex flex-col">
           <input
+            value={email}
             type="email"
             placeholder="Email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>
         <div className="w-full flex flex-col">
           <input
+          value={password}
             type="password"
             placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>

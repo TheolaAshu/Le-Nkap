@@ -25,7 +25,14 @@ function Signup() {
         confirmPassword,
       }),
     });
-  }
+
+    const res = await response.json();
+
+    if (response.ok){
+      console.log("success:", await response.json());
+    }
+    console.log("error:", res);
+  };
   return (
     <div className="w-full h-screen flex items-center flex-col gap-10 justify-center">
       <h2 className="text-5xl font-semibold text-teal-600">Tracky</h2>
@@ -38,36 +45,58 @@ function Signup() {
         </div>
         <div className="w-full flex flex-col">
           <input
+          value={name}
             type="name"
             placeholder="Full name"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>
         <div className="w-full flex flex-col">
           <input
+            value={email}
+            required
             type="email"
             placeholder="Email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>
         <div className="w-full flex flex-col">
           <input
+            value={phoneNumber}
+            required
             type="phone"
+            onChange={(e) => {
+            setPhoneNumber(e.target.value);
+          }}
             placeholder="Phone number"
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>
         <div className="w-full flex flex-col">
           <input
+            value={password}
             type="password"
             placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>
         <div className="w-full flex flex-col">
           <input
+          value={confirmPassword}
             type="password"
             placeholder="Confirm Password"
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
             className="w-full py-4 bg-transparent text-black border-b border-black outline-none focus:outline-none"
           />
         </div>{" "}
