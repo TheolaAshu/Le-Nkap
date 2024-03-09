@@ -1,7 +1,31 @@
 import {} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("https//le-nkap-v1.onrender.com/users", {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone:phoneNumber,
+        password,
+        confirmPassword,
+      }),
+    });
+  }
   return (
     <div className="w-full h-screen flex items-center flex-col gap-10 justify-center">
       <h2 className="text-5xl font-semibold text-teal-600">Tracky</h2>
