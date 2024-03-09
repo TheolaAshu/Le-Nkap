@@ -1,35 +1,60 @@
-import {} from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-  const response = await fetch("https//le-nkap-v1.onrender.com/users", {
-      method: "Post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    setLoading(true);
 
-    const res = await response.json();
+    axios
+      .post(
+        "https://le-nkap-v1.onrender.com/auth",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        localStorage.setItem("token", response.data);
 
-    if (response.ok){
-      console.log("success:", await response.json());
-    }
-    console.log("error:", res);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+        alert("Error login!");
+        return;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("token") != null) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
+
   return (
-    <div className="w-full h-screen flex items-center flex-col gap-10 justify-center">
+    <form
+      onSubmit={handleLogin}
+      className="w-full h-screen flex items-center flex-col gap-10 justify-center"
+    >
       <h2 className="text-5xl font-semibold text-teal-600">Tracky</h2>
       <div className="w-full bg-grey border rounded-xl p-6 flex flex-col gap-5 max-w-[700px]">
         <div className="w-full flex flex-colmax-w-[550px]">
@@ -51,7 +76,7 @@ function Login() {
         </div>
         <div className="w-full flex flex-col">
           <input
-          value={password}
+            value={password}
             type="password"
             placeholder="Password"
             onChange={(e) => {
@@ -61,14 +86,12 @@ function Login() {
           />
         </div>
 
-        <Link to={"/dashboard"}>
-          <button
-            className="w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/50 text-white font-semibold rounded-lg"
-            type="submit"
-          >
-            Login
-          </button>
-        </Link>
+        <button
+          className="w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/50 text-white font-semibold rounded-lg"
+          type="submit"
+        >
+          {loading ? "Please wait..." : "Login"}
+        </button>
         <Link to={"/"}>
           <div>
             Dont have an account?{" "}
@@ -76,7 +99,7 @@ function Login() {
           </div>
         </Link>
       </div>
-    </div>
+    </form>
   );
 }
 export default Login;
